@@ -55,6 +55,11 @@ int safe_vsnprintf(char *str, size_t size, const char *format, va_list ap) {
   return _vsnprintf(str, size-1, format, ap);
 }
 
+//Only define snprintf for VS 2013 and earlier, as VS 2015 now
+// includes a definition of snprintf.
+// See: https://msdn.microsoft.com/en-us/library/2ts7cx93.aspx
+#if defined(_MSC_VER) && _MSC_VER < 1900
+
 int snprintf(char *str, size_t size, const char *format, ...) {
   va_list ap;
   va_start(ap, format);
@@ -62,3 +67,5 @@ int snprintf(char *str, size_t size, const char *format, ...) {
   va_end(ap);
   return r;
 }
+
+#endif
